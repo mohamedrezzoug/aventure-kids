@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>عالم المغامرات – Aventure Kids 3D</title>
+  <meta name="theme-color" content="#7b2cbf">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="عالم المغامرات">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="stylesheet" href="css/style.css?v=7">
+</head>
+<body>
+  <canvas id="c"></canvas>
+
+  <!-- 1. البداية و اللغة -->
+  <section class="screen" id="start">
+    <div class="ver">v6</div>
+    <div class="center">
+      <h1 class="title" data-t="title"></h1>
+      <p class="subtitle" data-t="subtitle"></p>
+      <div class="pill" data-t="chooseLang"></div>
+      <div class="row">
+        <button class="btn blue lang" data-lang="ar">🇲🇦 العربية</button>
+        <button class="btn blue lang" data-lang="fr">🇫🇷 Français</button>
+      </div>
+      <button class="btn green" id="btnPlay" data-t="play"></button>
+    </div>
+  </section>
+
+  <!-- 2. اختيار البطل -->
+  <section class="screen" id="hero">
+    <div class="topbar"><button class="round" data-go="start">⬅️</button></div>
+    <div class="heroTitle" data-t="chooseHero"></div>
+    <div class="heroes">
+      <div class="row">
+        <div class="heroCard" data-hero="rayan"><b>👦 <span data-t="rayan"></span></b><span data-t="rayanDesc"></span></div>
+        <div class="heroCard" data-hero="salma"><b>👧 <span data-t="salma"></span></b><span data-t="salmaDesc"></span></div>
+      </div>
+      <button class="btn green" id="btnHeroGo" data-t="next"></button>
+    </div>
+  </section>
+
+  <!-- 3. خريطة العوالم -->
+  <section class="screen" id="map">
+    <div class="topbar">
+      <div class="grp"><button class="round" data-go="hero">⬅️</button><div class="pill">⭐ <span class="starCount">0</span></div></div>
+      <div class="grp">
+        <button class="round" data-go="rewards" title="">🏆</button>
+        <button class="round" data-go="wardrobe">👕</button>
+        <button class="round" id="btnParents">👨‍👩‍👧</button>
+      </div>
+    </div>
+    <div class="wrap">
+      <h2 data-t="map"></h2>
+      <div class="worlds" id="worlds"></div>
+    </div>
+  </section>
+
+  <!-- 4. اللعب -->
+  <section class="screen" id="hud">
+    <div class="topbar">
+      <div class="grp"><button class="round" id="btnHome">🏠</button><div class="pill">⭐ <span class="starCount">0</span></div><div class="pill">🗝️ <span id="keyCount">0</span>/<span id="keyTotal">3</span></div></div>
+      <div class="grp"><button class="round" id="btnReplay">🔊</button></div>
+    </div>
+    <div class="quest" id="quest"></div>
+    <div id="prompt"><div class="pill" id="promptTxt"></div><button class="round" id="btnRepeat">🔁</button></div>
+    <div id="dialog"><div class="face" id="dFace"></div><div class="txt"><div class="nm" id="dName"></div><div class="say" id="dSay"></div><div class="say2" id="dSay2"></div></div><button class="round" id="btnDSay">🔊</button></div>
+    <div id="joy"><div class="knob"></div></div>
+    <div id="hint" data-t="tapHint"></div>
+  </section>
+
+  <!-- 5. الملابس -->
+  <section class="screen" id="wardrobe">
+    <div class="topbar"><button class="round" data-go="map">⬅️</button><div class="pill" data-t="wardrobe"></div><span></span></div>
+    <div class="panel">
+      <div style="font-weight:900" data-t="shirt"></div><div class="swatches" id="swShirt"></div>
+      <div style="font-weight:900" data-t="hair"></div><div class="swatches" id="swHair"></div>
+      <div style="font-weight:900" data-t="hat"></div><div class="row" id="hatOpts" style="margin-top:8px"></div>
+    </div>
+  </section>
+
+  <!-- 6. الجوائز -->
+  <section class="screen" id="rewards" style="background:linear-gradient(#ffe8b3,#ffd6e8);overflow:auto">
+    <div class="topbar"><button class="round" data-go="map">⬅️</button><div class="pill">⭐ <span class="starCount">0</span></div><span></span></div>
+    <div style="padding:90px 16px 30px;max-width:800px;margin:0 auto">
+      <h2 data-t="medals"></h2><div class="medals" id="medalList"></div>
+      <h2 style="margin-top:24px" data-t="outfits"></h2><div class="medals" id="hatList"></div>
+    </div>
+  </section>
+
+  <!-- 7. الوالدين -->
+  <section class="screen" id="parents" style="background:rgba(40,10,70,.5)">
+    <div class="center">
+      <div class="panel" style="width:min(520px,94vw)">
+        <h2>👨‍👩‍👧 <span data-t="settings"></span></h2>
+        <div class="setrow"><span data-t="language"></span><span class="row"><button class="btn small blue lang2" data-lang="ar">العربية</button><button class="btn small blue lang2" data-lang="fr">Français</button></span></div>
+        <div class="setrow"><span data-t="voice"></span><button class="btn small" id="tgVoice"></button></div>
+        <div class="setrow"><span data-t="music"></span><button class="btn small" id="tgMusic"></button></div>
+        <div class="setrow"><span data-t="timeLimit"></span><span class="row" id="limits"></span></div>
+        <div class="setrow"><span id="played"></span></div>
+        <div class="setrow"><button class="btn small" style="background:#e63946;box-shadow:0 5px 0 #9d0208" id="btnReset" data-t="resetProgress"></button><button class="btn small green" data-go="map" data-t="back"></button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- نوافذ -->
+  <div class="modal" id="gate"><div class="panel" style="text-align:center"><h2 id="gateQ"></h2><input class="gate" id="gateIn" inputmode="numeric"><div class="row" style="margin-top:14px"><button class="btn small" id="gateNo" data-t="back"></button><button class="btn small green" id="gateOk" data-t="ok"></button></div></div></div>
+  <div class="modal" id="doneModal"><div class="panel" style="text-align:center;max-width:480px"><div class="big">🏆</div><h2 id="doneTitle"></h2><p style="font-weight:800;font-size:20px" data-t="youWon"></p><div class="row" id="doneItems" style="font-size:20px;font-weight:800"></div><div class="row" style="margin-top:16px"><button class="btn small" style="background:#ff9f1c;box-shadow:0 5px 0 #c26a00" id="doneReplay" data-t="replay"></button><button class="btn small blue" id="doneStay" data-t="continue"></button><button class="btn small green" id="doneMap" data-t="toMap"></button></div></div></div>
+  <div class="modal" id="restModal"><div class="panel" style="text-align:center;max-width:460px"><div class="big">😴</div><h2 data-t="restTitle"></h2><p style="font-size:20px;font-weight:700" data-t="restText"></p><button class="btn small purple" id="restParents" data-t="settings"></button></div></div>
+  <div id="toast"></div>
+
+  <script type="module" src="js/main.js?v=7"></script>
+</body>
+</html>
